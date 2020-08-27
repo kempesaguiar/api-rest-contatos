@@ -3,9 +3,10 @@ import mongoose from '../database/db';
 
 import Contato from '../models/contato';
 
+// Lista todos os contatos
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const contato = await Contato.find(); 
+        const contato = await Contato.find({ status: "Ativo" }).where; 
         return res.status(200).json({ contato });
     } catch(e){
         console.log(e);
@@ -13,6 +14,7 @@ export const getAll = async (req: Request, res: Response) => {
     }    
 }
 
+// Insere novo contato
 export const createContato = async (req: Request, res: Response) => {
     const { nome, data_nascimento, sexo } = req.body;
     
@@ -26,17 +28,11 @@ export const createContato = async (req: Request, res: Response) => {
     const idade = ano_atual - ano_nasc;
     const status = 'Ativo';
 
-    //console.log(date);
-    //console.log(dt_format);
-    //console.log(hoje);
-    //console.log(data_nascimento);
-
     // Verifica data atual > data de nacimento
     if (hoje < new Date(data_nascimento)){
         return res.status(400).json('Data de nacimento não pode ser maior que a data atual');
     }
 
-    // Criar funcao para calcular a idade
     try {
         const contato = await Contato.create({ nome, data_nascimento, sexo, idade, status });
         return res.status(201).json({ contato });
@@ -46,6 +42,7 @@ export const createContato = async (req: Request, res: Response) => {
     }
 }
 
+// Inativa contato
 export const inactiveContato = async (req: Request, res: Response) => {
     const id = req.params.id;
     const inativo = 'Inativo';
@@ -61,6 +58,7 @@ export const inactiveContato = async (req: Request, res: Response) => {
     }
 }
 
+// Deleta contato
 export const deleteContato = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
