@@ -15,13 +15,24 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const createContato = async (req: Request, res: Response) => {
     const { nome, data_nascimento, sexo } = req.body;
-    const idade = 18;
-    const status = 'Ativo';
-    // Verifica data atual > data de nacimento
+    
+    // Calcula idade
     const date = new Date();
-    console.log(date);
+    const dt_format = date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear(); 
+    const hoje = new Date(dt_format);
+    const quebra_nasc = data_nascimento.split('/');
+    const ano_nasc = parseInt(quebra_nasc[2]);
+    const ano_atual = date.getFullYear();
+    const idade = ano_atual - ano_nasc;
+    const status = 'Ativo';
 
-    if (date < data_nascimento){
+    //console.log(date);
+    //console.log(dt_format);
+    //console.log(hoje);
+    //console.log(data_nascimento);
+
+    // Verifica data atual > data de nacimento
+    if (hoje < new Date(data_nascimento)){
         return res.status(400).json('Data de nacimento não pode ser maior que a data atual');
     }
 
