@@ -6,7 +6,7 @@ import Contato from '../models/contato';
 // Lista todos os contatos
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const contato = await Contato.find({ status: "Ativo" }).where; 
+        const contato = await Contato.find({ status: "Ativo" }); 
         return res.status(200).json({ contato });
     } catch(e){
         console.log(e);
